@@ -18,7 +18,7 @@ func NewQQExmail(cfg *MailCfg) *QQExmailService {
 	}
 }
 
-func (s *QQExmailService) SendMail(subject, body string) (err error) {
+func (s *QQExmailService) Notify(subject, body string) (err error) {
 	addr := fmt.Sprintf("%s:%d", s.Config.Host, s.Config.Port)
 	auth := smtp.PlainAuth("", s.Config.From, s.Config.Password, s.Config.Host)
 

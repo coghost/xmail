@@ -15,7 +15,7 @@ const (
 )
 
 type IMail interface {
-	SendMail(subject, body string) error
+	Notify(subject, body string) error
 }
 
 type MailService struct {
@@ -49,10 +49,6 @@ func GenMailService(cfg *MailCfg) IMail {
 		ms = NewQQExmail(cfg)
 	}
 	return ms
-}
-
-func SendMail(ms IMail, subject, body string) (err error) {
-	return ms.SendMail(subject, body)
 }
 
 func VerifyConfig(cfg *MailCfg) error {

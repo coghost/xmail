@@ -44,6 +44,21 @@ var (
 	}
 )
 
+func init() {
+	required := []string{
+		"XMAIL_TO",
+		"XMAIL_GF",
+		"XMAIL_GP",
+		"XMAIL_QF",
+		"XMAIL_QP",
+	}
+	for _, v := range required {
+		if _, b := os.LookupEnv(v); !b {
+			panic(fmt.Sprintf("please set env %s first", v))
+		}
+	}
+}
+
 func TestXmail(t *testing.T) {
 	suite.Run(t, new(XmailSuite))
 }
@@ -61,7 +76,7 @@ func (s *XmailSuite) Test_01() {
 	s.Nil(err)
 
 	subject, body := "Test with alias", "this is a test mail with alias Xmail"
-	err = xmail.SendMail(ms, subject, body)
+	err = ms.Notify(subject, body)
 	s.Nil(err)
 }
 
@@ -83,14 +98,14 @@ func (s *GmailSuite) TearDownSuite() {
 
 func (s *GmailSuite) Test_00_no_alias() {
 	ms := xmail.NewGmail(s.cfg)
-	err := ms.SendMail("Test no alias", "this is a test mail with no alias")
+	err := ms.Notify("Test no alias", "this is a test mail with no alias")
 	s.Nil(err)
 }
 
 func (s *GmailSuite) Test_01_with_alias() {
 	s.cfg.Alias = "Gmail"
 	ms := xmail.NewGmail(s.cfg)
-	err := ms.SendMail("Test with alias", fmt.Sprintf("this is a test mail with alias %s", ms.Config.Alias))
+	err := ms.Notify("Test with alias", fmt.Sprintf("this is a test mail with alias %s", ms.Config.Alias))
 	s.Nil(err)
 }
 
@@ -113,13 +128,13 @@ func (s *QQExmailSuite) TearDownSuite() {
 
 func (s *QQExmailSuite) Test_00_no_alias() {
 	ms := xmail.NewQQExmail(s.cfg)
-	err := ms.SendMail("Test no alias", "this is a test mail with no alias")
+	err := ms.Notify("Test no alias", "this is a test mail with no alias")
 	s.Nil(err)
 }
 
 func (s *QQExmailSuite) Test_01_with_alias() {
 	s.cfg.Alias = "QQExmail"
 	ms := xmail.NewQQExmail(s.cfg)
-	err := ms.SendMail("Test with alias", fmt.Sprintf("this is a test mail with alias %s", ms.Config.Alias))
+	err := ms.Notify("Test with alias", fmt.Sprintf("this is a test mail with alias %s", ms.Config.Alias))
 	s.Nil(err)
 }

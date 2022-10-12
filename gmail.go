@@ -18,7 +18,7 @@ func NewGmail(cfg *MailCfg) *GmailService {
 	}
 }
 
-func (s *GmailService) SendMail(subject, body string) (err error) {
+func (s *GmailService) Notify(subject, body string) (err error) {
 	client := &email.Email{
 		From:    s.Config.From,
 		To:      s.Config.To,
